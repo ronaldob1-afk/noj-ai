@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import openai, os
 
-# OpenAI API key (set in Render environment)
+# OpenAI API key (set safely in Render environment)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
@@ -17,17 +17,17 @@ def noj():
     )
 
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-5",
             messages=[{"role": "system", "content": prompt}]
         )
-        reply = response.choices[0].message["content"]
+        reply = response.choices[0].message.content
     except Exception as e:
         reply = f"Error: {str(e)}"
 
     return jsonify({"reply": reply})
 
-# Optional home route for quick Render test
+# Optional home route to test if Render is live
 @app.route("/", methods=["GET"])
 def home():
     return "N.O.J. is live at https://noj-ai.onrender.com 🚀"
